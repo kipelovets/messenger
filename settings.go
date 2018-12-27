@@ -53,3 +53,13 @@ type HomeURL struct {
 	WebviewShareButton string `json:"webview_share_button,omitempty"`
 	InTest             bool   `json:"in_test,omitempty"`
 }
+
+type GetStartedPayload struct {
+    Payload string `json:"payload"`
+}
+
+type GetStartedSetting struct {
+    GetStarted GetStartedPayload `json:"get_started,omitempty"`
+    PersistentMenu []string `json:"persistent_menu,omitempty"`
+    Greeting []string `json:"greeting,omitempty"`
+}

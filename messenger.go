@@ -507,6 +507,35 @@ func (m *Messenger) classify(info MessageInfo, e Entry) Action {
 	return UnknownAction
 }
 
+func (m *Messenger) GetStartedSetting(payload string) error {
+	d := GetStartedSetting{
+        GetStarted: GetStartedPayload{Payload:payload},
+	}
+
+	data, err := json.Marshal(d)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("POST", MessengerProfileURL, bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.URL.RawQuery = "access_token=" + m.token
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return checkFacebookError(resp.Body)
+}
+
 // newVerifyHandler returns a function which can be used to handle webhook verification
 func newVerifyHandler(token string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
